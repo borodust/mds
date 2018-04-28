@@ -85,7 +85,7 @@
 (defvar *key-bag* nil)
 
 (defun update-pos ()
-  (let ((move-speed 3.5))    
+  (let ((move-speed 3.5))
     (when (or (member :left *key-bag*) (member :a *key-bag*))
       (decf (x (pos *player*)) move-speed))
     (when (or (member :right *key-bag*) (member :d *key-bag*))
@@ -105,6 +105,7 @@
                          (deletef *key-bag* button))))
 
 (defmethod gamekit:post-initialize ((app example))
+  (reset-game)
   (loop for key in '(:w :s :a :d :left :right :up :down)
         do (bind-movement-button key)))
 
@@ -135,7 +136,7 @@
 		       :stroke-paint (if (> (hp obj) 0) (color obj) *black*)
 		       :fill-paint (vec4 0 0 0 0)
 		       :thickness 2))
-  
+
 
 (defun circles-collide-p (x y radius x2 y2 radius2)
   ;; Yes I know about the faster way of doing this screw it this is shorter
@@ -152,7 +153,7 @@
     (loop for s across *enemy-shots* do
 	 (when (objects-collide-p *player* s)
 	   (setf collided t))
-	 (when (and (circles-collide-p (x (pos s)) 
+	 (when (and (circles-collide-p (x (pos s))
 				     (y (pos s))
 				     (radius s)
 				     (x (pos *player*))
@@ -230,7 +231,7 @@
 		   *BLACK*
 		   :thickness 4)))
 
-		   
+
 
 (defun draw-player ()
   (draw-circle (pos *player*)
@@ -274,5 +275,4 @@
   (draw-hud))
 
 (defun run ()
-  (reset-game)
   (gamekit:start 'example))
